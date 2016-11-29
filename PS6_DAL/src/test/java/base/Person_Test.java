@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
@@ -52,5 +53,24 @@ public class Person_Test {
 	}
 	
 	
+@AfterClass
+public static void CleanUp(){
+	ArrayList<PersonDomainModel> createdPersons = null;
+	createdPersons = PersonDAL.getPersons();
+	 	for (PersonDomainModel cp: createdPersons){
+	 		PersonDAL.deletePerson(cp.getPersonID());
+	 	}
+	}
+@Test
+public void TestGetAllPersons(){
+	assertEquals(PersonDAL.getPersons().get(0).getPersonID(), person1.getPersonID());
+	}
+@Test
+public void TestUpdatePerson(){
+	person1.setPostalCode(123123);
+	PersonDAL.updatePerson(person1);
+	assertEquals(PersonDAL.getPerson(person1.getPersonID()).getPostalCode(),
+			123123);
+}
 
 }
